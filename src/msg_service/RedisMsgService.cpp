@@ -55,7 +55,7 @@ void* RedisMsgService::recvThreadRunner(void *service_ptr)  {
     while (1) {
         redisReply *r = RedisMsgService::lpopFrom(client->conn, client->CLIENT.c_str(), 6);
         if (!r || r->len == 0) {
-            usleep(100);
+            usleep(5);
             freeReplyObject(r);
             continue;
         }
@@ -93,7 +93,7 @@ void* RedisMsgService::sendThreadRunner(void *service_ptr) {
     while (1) {
         Message* msg = client->msgMgr->popSend();
         if (msg == NULL) {
-            usleep(100);
+            usleep(5);
             continue;
         }
 
