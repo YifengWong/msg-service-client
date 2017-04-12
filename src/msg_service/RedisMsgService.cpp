@@ -33,7 +33,8 @@ void RedisMsgService::startService() {
     }
 }
 
-redisReply* RedisMsgService::rpushTo(redisContext* conn, const char* key, int keyLen, const char* value, int valueLen) {
+redisReply* RedisMsgService::rpushTo(redisContext* conn, const char* key, size_t keyLen,
+                                     const char* value, size_t valueLen) {
     int argc = 3;
     const char *argv[] = {"RPUSH", key, value};
     const size_t argvlen[] = {5, keyLen, valueLen};
@@ -41,7 +42,7 @@ redisReply* RedisMsgService::rpushTo(redisContext* conn, const char* key, int ke
     return (redisReply *)redisCommandArgv(conn, argc, argv, argvlen);
 }
 
-redisReply* RedisMsgService::lpopFrom(redisContext* conn, const char* key, int keyLen) {
+redisReply* RedisMsgService::lpopFrom(redisContext* conn, const char* key, size_t keyLen) {
     int argc = 2;
     const char *argv[] = {"LPOP", key};
     const size_t argvlen[] = {4, keyLen};
@@ -59,24 +60,24 @@ void* RedisMsgService::recvThreadRunner(void *service_ptr)  {
             freeReplyObject(r);
             continue;
         }
-
-        // recv a head
-        int nowCount = 0;
-
-        Message* msg = new Message(r->str);
-        nowCount += Message::HEAD_LENGTH;
         // TODO read error
 
-        // recv the params
+        // Receive a msg and genarate a message head.
+        int nowCount = 0;
+        Message* msg = new Message(r->str);
+        nowCount += Message::HEAD_LENGTH;
+
+        // Generate the params, if it is an image message.
         if (msg->getFlag() == Message::FLAG_IMG) {
             msg->writeParamsBytes(r->str+nowCount, Message::PARAM_ALL_LENGTH);
             nowCount += Message::PARAM_ALL_LENGTH;
         }
 
-        // recv the file
+        // Generate the file.
         msg->writeFileBytes(r->str+nowCount, msg->getFileLength());
         client->msgMgr->pushRecv(msg);
 
+        // DEBUG: print the receive time (milliseconds)
         struct timeval tv;
         gettimeofday(&tv,NULL);
         long time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
@@ -96,9 +97,9 @@ void* RedisMsgService::sendThreadRunner(void *service_ptr) {
             usleep(5);
             continue;
         }
-
+        // TODO What if send error?
         redisReply *r = RedisMsgService::rpushTo(client->conn, client->SERVER.c_str(), 6,
-                                                 msg->getMsgBytes(), Message::HEAD_LENGTH+msg->getFileLength());
+                                                 msg->getMsgBytes(), msg->getMsgLength());
         delete msg;
     }
     return 0;

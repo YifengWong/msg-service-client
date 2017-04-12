@@ -4,6 +4,9 @@
 #include <string>
 typedef char byte;
 
+/*
+ * The message use for communication.
+ * */
 class Message {
 public:
     static const byte FLAG_FAIL = 0;
@@ -11,6 +14,7 @@ public:
     static const byte FLAG_NEED = 2;
     static const byte FLAG_RESULT = 3;
     static const byte FLAG_HIGH = 3;
+
     static const int HEAD_LENGTH = 42;
 
     static const int PARAM_NUM = 7;
@@ -44,12 +48,40 @@ public:
     Message(Message* msg);
     ~Message();
 
+    /*
+     * Get the flag in the message.
+     * */
     byte getFlag();
+
+    /*
+     * Get the request uuid in the message.
+     * */
     std::string getUserUuid();
+
+    /*
+     * Get the file num, to check the message order.
+     * */
     int getFileNum();
+
+    /*
+     * Get the file length, to make it binary-safe.
+     * */
     int getFileLength();
+
+    /*
+     * Get the file bytes.
+     * */
     byte* getFileBytes();
+
+    /*
+     * Get the message all bytes.
+     * */
     byte* getMsgBytes();
+
+    /*
+     * Get the message bytes all length, to make it binary-safe.
+     * */
+    int getMsgLength();
 
 
     /*

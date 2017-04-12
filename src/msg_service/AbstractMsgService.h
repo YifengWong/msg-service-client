@@ -11,7 +11,9 @@
 #include "Message.h"
 #include "MsgManager.h"
 
-
+/*
+ * As an interface for Message Service.
+ * */
 class AbstractMsgService {
 public:
     AbstractMsgService(MsgManager* msgMgr);
@@ -28,12 +30,12 @@ public:
     const std::string* getNextRequestUuid();
 
     /*
-     * Get next msg with a img file.
+     * Get next message with a image file.
      * */
     Message* getNextMsg(const std::string userUuid);
 
     /*
-     * Send a diy msg to server.
+     * Send a message to server.
      * */
     void sendMsg(Message* msg);// include result
 

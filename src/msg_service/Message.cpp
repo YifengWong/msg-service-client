@@ -112,6 +112,10 @@ byte * Message::getMsgBytes() {
     return allBytes;
 }
 
+int Message::getMsgLength() {
+    return HEAD_LENGTH + fileLength;
+}
+
 
 void Message::writeParamsBytes(const byte* bytes, int byteLength) {
 	if (params == NULL) params = new float[PARAM_NUM * PARAM_NUM_EACH];
