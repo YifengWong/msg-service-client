@@ -19,10 +19,10 @@ public:
 
     static const int PARAM_NUM = 7;
     static const int PARAM_NUM_EACH = 3;
-	// All params length in byte
+	// All params length in byte.
     static const int PARAM_ALL_LENGTH = 4 * PARAM_NUM_EACH * PARAM_NUM;
 
-    // The postion of each param in the params array
+    // The postion of each param in the params array.
     static const int LINEAR_ACCELERATION = 0;
     static const int ACCELEROMETER = 3;
     static const int GRAVITY = 6;
@@ -88,12 +88,19 @@ public:
      * return the params array.
      * use such as: linear_acceleration_x
      *              - getParams[LINEAR_ACCELERATION+0]
-     *          gravity_y
+     *              gravity_y
      *              - getParams[GRAVITY+1]
      * */
     float* getParams();
 
+    /*
+     * Write the bytes into the message file.
+     * */
     void writeFileBytes(const byte* bytes, int byteLength);
+
+    /*
+     * Write the bytes into the message params.
+     * */
     void writeParamsBytes(const byte* bytes, int byteLength);
 
 

@@ -11,7 +11,6 @@ AbstractMsgService::AbstractMsgService(MsgManager* msgMgr) {
     this->msgMgr = msgMgr;
     recvThreadId = -1;
     sendThreadId = -1;
-
 }
 
 AbstractMsgService::~AbstractMsgService() {

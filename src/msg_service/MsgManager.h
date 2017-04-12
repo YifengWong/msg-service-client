@@ -43,17 +43,17 @@ public:
      * */
 	void setFinished(const std::string userUuid);
 
-private:
-    /*
+	/*
      * Pop the message which is waiting for being sent.
      * */
-	Message* popSend();
+    Message* popSend();
 
     /*
      * Push a received message to the queue and it will be dealt.
      * */
-	void pushRecv(Message* msg);
+    void pushRecv(Message* msg);
 
+private:
 	// The message wait for sending.
 	pthread_mutex_t mtxSendQueue;
 	std::queue<Message*>* sendQueue;
